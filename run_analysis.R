@@ -43,28 +43,29 @@ merged_data <- rbind(
 )
 
 
-#Step 4: Assign column (Variables) names
+#Step 4: Assign column names
 colnames(merged_data) <- c("subject", features[, 2], "activity")
 
 #Step 5: Create a Tidy data set
 
-#Extract Mean and SD only. 
+##Extract Mean and SD for each measurement. 
 
-# Determine columns of data set to keep based on column name...
+# Determine columns of data set that need to be kept
 variables <- grepl("subject|activity|mean|std", colnames(merged_data))
 
-# ... and keep data in these columns only
+# Extract data of these columns only
 merged_data <- merged_data[, variables]
 
 
-
+## Use descriptive activity names 
 merged_data$activity <- factor(merged_data$activity, 
                                  levels = activities[, 1], labels = activities[, 2])
 
+## Get column names and remove certain characters 
 HA_cols <- colnames(merged_data)
 HA_cols <- gsub("[\\(\\)-]", "", HA_cols)
 
-
+## Modify column names 
 HA_cols <- gsub("^f", "Frequency", HA_cols)
 HA_cols <- gsub("^t", "Time", HA_cols)
 HA_cols <- gsub("Acc", "Accelerometer", HA_cols)
@@ -77,11 +78,17 @@ HA_cols<-gsub("gravity", "Gravity", HA_cols)
 HA_cols <-gsub("-mean()", "Mean", HA_cols, ignore.case = TRUE)
 HA_cols <-gsub("-std()", "STD", HA_cols, ignore.case = TRUE)
 HA_cols <-gsub("-freq()", "Frequency", HA_cols, ignore.case = TRUE)
-  
+
+## Use modified column names  
 colnames(merged_data) <- HA_cols
 
+#Step 6: Final Data set: Group by subject and activity
 
-#Final Data set 
 tidy_data <- merged_data %>% 
   group_by(subject, activity) %>%
   summarise_each(list(mean = mean))
+
+#Step 7: Output file 
+write.table(tidy_data, "tidy_data.txt", row.names = FALSE, 
+            quote = FALSE)
+
