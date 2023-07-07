@@ -6,7 +6,7 @@
 
 library(dplyr)
 
-#Step 1. Downloading Zip file 
+####### I. Downloading Zip file #########
 
 zipUrl <- "https://d396qusza40orc.cloudfront.net/getdata%2Fprojectfiles%2FUCI%20HAR%20Dataset.zip"
 zipFile <- "UCI HAR Dataset.zip"
@@ -21,7 +21,7 @@ if (!file.exists(dataPath)) {
   unzip(zipFile)
 }
 
-#Step 2: Read Data 
+######## II. Read Data   ##########
 train_sub <- read.table(file.path(dataPath, "train", "subject_train.txt"))
 train_values <- read.table(file.path(dataPath, "train", "X_train.txt"))
 train_activity <- read.table(file.path(dataPath, "train", "y_train.txt"))
@@ -35,7 +35,9 @@ activities <- read.table(file.path(dataPath, "activity_labels.txt")) # Read acti
 colnames(activities) <- c("activityId", "activityLabel")
 
 
-#Step 3: Merging data sets: Test and training 
+####### III. Create a tidy data set #######
+
+### Step 1. Merge the training and the test sets to create one data set.
 
 merged_data <- rbind(
   cbind(train_sub, train_values, train_activity),
@@ -43,12 +45,12 @@ merged_data <- rbind(
 )
 
 
-#Step 4: Assign column names
+#Assign column names
 colnames(merged_data) <- c("subject", features[, 2], "activity")
 
-#Step 5: Create a Tidy data set
 
-##Extract Mean and SD for each measurement. 
+### Step 2: Extract only the measurements on the mean and standard deviation for each measurement. 
+
 
 # Determine columns of data set that need to be kept
 variables <- grepl("subject|activity|mean|std", colnames(merged_data))
@@ -57,11 +59,14 @@ variables <- grepl("subject|activity|mean|std", colnames(merged_data))
 merged_data <- merged_data[, variables]
 
 
-## Use descriptive activity names 
+### Step 3. Uses descriptive activity names to name the activities in the data set
 merged_data$activity <- factor(merged_data$activity, 
                                  levels = activities[, 1], labels = activities[, 2])
 
-## Get column names and remove certain characters 
+
+### Step 4: Appropriately labels the data set with descriptive variable names.
+
+# Get column names and remove certain characters 
 HA_cols <- colnames(merged_data)
 HA_cols <- gsub("[\\(\\)-]", "", HA_cols)
 
@@ -79,16 +84,16 @@ HA_cols <-gsub("-mean()", "Mean", HA_cols, ignore.case = TRUE)
 HA_cols <-gsub("-std()", "STD", HA_cols, ignore.case = TRUE)
 HA_cols <-gsub("-freq()", "Frequency", HA_cols, ignore.case = TRUE)
 
-## Use modified column names  
+# Use modified column names  
 colnames(merged_data) <- HA_cols
 
-#Step 6: Final Data set: Group by subject and activity
+### Step 5: From the data set in step 4, creates a second, independent tidy data set with the average of each variable for each activity and each subject.
 
 tidy_data <- merged_data %>% 
   group_by(subject, activity) %>%
   summarise_each(list(mean = mean))
 
-#Step 7: Output file 
+#Output file 
 write.table(tidy_data, "tidy_data.txt", row.names = FALSE, 
             quote = FALSE)
 
