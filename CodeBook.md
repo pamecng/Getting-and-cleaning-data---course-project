@@ -1,4 +1,5 @@
 This is the code book for the project
+
 Name: Pamela Navarro 
 
 A. source data
@@ -19,9 +20,11 @@ Data set Information:
 
 
 B. R Script: "run_analysis.R"
+
 I. Download data sets and unzip files 
 
 II. Read files
+
 train_sub <- "subject_train.txt""  #Contains train data of 21/30 volunteer subjects being observed
 train_values <- "X_train.txt" #Contains recorded features train data
 train_activity <- "y_train.txt" #Contains train data of activities’code labels
@@ -30,7 +33,8 @@ test_values <- "X_test.txt" #Contains recorded features test data
 test_activity <- "y_test.txt" #Contains test data of activities’code labels 
 activities <- activity labels
 
-II. Create a tidy dataset: Data cleaning performed in 5 steps:
+
+III. Create a tidy dataset: Data cleaning performed in 5 steps:
 
 Step 1: Merges the training and the test sets to create one data set.
 The training and test datasets were merged to create one preliminary data set. 
