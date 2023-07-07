@@ -1,6 +1,8 @@
 ========================
-Getting and Cleaning Data 
-Week 4 Course Project
+Coursera: Getting and Cleaning Data 
+
+Peer-graded Assignment
+
 Name: Pamela Navarro-Gonzales
 =====================
 In this project, data collected from the accelerometer and gyroscope of the Samsung Galaxy S smartphone was retrieved, worked with, and cleaned, to prepare a tidy data that can be used for later analysis.
@@ -16,6 +18,8 @@ This repository contains the following files:
 - R script (run_analysis.R): the R script that was used to create the data set
 - Codebook (CodeBook.md): Describes the contents of the data set (data, variables and transformations used to generate the data)
 - Tidy Data set (tidy_data.txt): Final dataset (output) 
+
+
 ====================
 
 run_analysis.R contains all the code to perform the analysis described in this 5 steps:
